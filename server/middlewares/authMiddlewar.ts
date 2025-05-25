@@ -2,12 +2,16 @@ import jwt from 'jsonwebtoken';
 import User from '../models/User';
 import { Request, Response, NextFunction } from 'express';
 
-interface AuthRequest extends Request {
-  user?: any; // Ideally, replace `any` with a specific User type
+export interface AuthRequest extends Request {
+  user?: {
+    id: string;
+    wallet: string;
+    [key: string]: any;
+  };
 }
 
 export const authMiddleware = async (
-  req: Request,
+  req: AuthRequest,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
@@ -15,7 +19,7 @@ export const authMiddleware = async (
 
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
     res.status(401).json({ message: 'Unauthorized' });
-    return; // ❗ return void, not a response
+    return;
   }
 
   const token = authHeader.split(' ')[1];
@@ -29,8 +33,12 @@ export const authMiddleware = async (
       return;
     }
 
-    (req as AuthRequest).user = user;
-    next(); // ✅ only call next() when authentication succeeds
+    req.user = {
+      id: user._id.toString(),
+      wallet: user.walletAddress, // ✅ correct assignment
+    };
+
+    next();
   } catch (err) {
     console.error(err);
     res.status(401).json({ message: 'Invalid token' });

@@ -9,19 +9,24 @@ export const getUserProfile = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const user = (req as any).user; // ✅ safer if you're not using a custom type
+    const authUser = (req as any).user; // ✅ safer if you're not using a custom type
 
-    if (!user) {
+    if (!authUser) {
       res.status(401).json({ message: 'Unauthorized' });
       return;
     }
 
+    const user= await User.findById(authUser.id).select('-password');
+    if(!user){
+      res.status(404).json({ message: 'User not found' });
+      return;
+    }
     const transactions = await Transaction.find({ user: user._id }).sort({ date: -1 });
 
     res.json({
       user: {
         email: user.email,
-        walletAddress: user.walletAddress,
+        walletAddress: user.walletAddress.toLowerCase(),
         balance: user.balance,
         currencies: user.currencies,
       },

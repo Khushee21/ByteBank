@@ -1,207 +1,78 @@
-import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import api from "@/utils/api";
-import { toast } from "sonner";
-import { User, Transaction } from "@/types";
-import ProfileCompletionDialog from "@/components/ProfileCompletion";
-import { motion, AnimatePresence } from "framer-motion";
-import "@/app/globals.css";
-import Header from "@/components/Header";
+import React from 'react';
+import { motion } from 'framer-motion';
+import { Button } from '@/components/ui/button';
+import { Wallet, Send, DownloadCloud } from 'lucide-react';
+import '@/app/globals.css';
+import {useRouter}  from 'next/navigation';
+import Header from '@/components/Header';
 
-
-export default function Dashboard() {
-  const [user, setUser] = useState<User | null>(null);
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+const Dashboard = () => {
   const router = useRouter();
-
-  const fetchData = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        toast.error("Login required");
-        router.push("/auth");
-        return;
-      }
-
-      const res = await api.get<{ user: User; transactions: Transaction[] }>(
-        "api/user/getProfile",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-      setUser(res.data.user);
-      setTransactions(res.data.transactions);
-    } catch (err: any) {
-      console.error("Dashboard error:", err);
-      toast.error("Failed to load dashboard");
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    if (
-      user &&
-      (!user.walletAddress ||
-        user.balance === undefined ||
-        !user.currencies ||
-        Object.keys(user.currencies).length === 0)
-    ) {
-      setIsDialogOpen(true);
-    }
-  }, [user]);
-
-  const handleSaveProfile = async (data: {
-    walletAddress: string;
-    balance: string;
-    currencies: string;
-  }) => {
-    const currencyMap = data.currencies
-      .split(",")
-      .reduce((acc, curr) => {
-        const key = curr.trim();
-        acc[key] = 0;
-        return acc;
-      }, {} as Record<string, number>);
-
-    setUser((prev) =>
-      prev
-        ? {
-            ...prev,
-            walletAddress: data.walletAddress,
-            balance: parseFloat(data.balance),
-            currencies: currencyMap,
-          }
-        : prev
-    );
-    setIsDialogOpen(false);
-    toast.success("Profile updated successfully!");
-  };
-
-  if (!user)
-    return <p className="text-center mt-20">Loading dashboard...</p>;
-
   return (
     <>
     <Header/>
-      <AnimatePresence>
-        {isDialogOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
-          >
-            <ProfileCompletionDialog
-              isOpen={isDialogOpen}
-              onClose={() => setIsDialogOpen(false)}
-              onSave={handleSaveProfile}
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
+    <div className="min-h-screen bg-blue-100 text-black p-8 mt-6">
+      <motion.h1
+        initial={{ opacity: 0, y: -50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        className="text-5xl font-extrabold mb-10 text-center text-black mt-12"
+      >
+        Welcome to Your Wallet
+      </motion.h1>
 
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.8 }}
-        className="min-h-screen bg-blue-50 p-6"
+        className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto"
+        initial="hidden"
+        animate="visible"
+        variants={{
+          visible: {
+            transition: {
+              staggerChildren: 0.2
+            }
+          }
+        }}
       >
         <motion.div
-          initial={{ y: 40, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ type: "spring", stiffness: 60 }}
-          className="max-w-4xl mx-auto bg-white shadow-md p-6 rounded-md"
+          className="bg-gradient-to-r from-blue-400 via-blue-50 to-blue-300 backdrop-blur-md rounded-2xl p-6 shadow-lg hover:scale-105 transition-transform"
+          whileHover={{ scale: 1.05 }}
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
         >
-          <motion.h1
-            className="text-2xl font-bold mb-4 pt-14"
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.3 }}
-          >
-            Welcome to Your Wallet
-          </motion.h1>
+          <Wallet className="w-12 h-12 mb-4 text-purple-700" />
+          <h2 className="text-xl font-semibold mb-2">My Wallet</h2>
+          <p>View your wallet address, balance and currencies.</p>
+          <Button variant="secondary" className="mt-4 w-full"
+          onClick={() => router.push('/profile')}>Go to Wallet</Button>
+        </motion.div>
 
-          <div className="mb-6">
-            <p><strong>Email:</strong> {user.email}</p>
-            <p><strong>Wallet Address:</strong> {user.walletAddress}</p>
-          </div>
+        <motion.div
+          className="bg-gradient-to-r from-blue-50 via-blue-400 to-blue-100 backdrop-blur-md rounded-2xl p-6 shadow-lg hover:scale-105 transition-transform"
+          whileHover={{ scale: 1.05 }}
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          <Send className="w-12 h-12 mb-4 text-green-900" />
+          <h2 className="text-xl font-semibold mb-2">Send Crypto</h2>
+          <p>Quickly transfer crypto to other wallet addresses.</p>
+          <Button variant="secondary" className="mt-4 w-full" onClick={()=>router.push('/send-receive')}>Send Now</Button>
+        </motion.div>
 
-          <div className="mb-6">
-            <h2 className="text-xl font-semibold mb-2">Balances</h2>
-            <div className="grid grid-cols-3 gap-4">
-              {Object.entries(user.currencies).map(([currency, amount], index) => (
-                <motion.div
-                  key={currency}
-                  className="bg-blue-100 rounded p-4 text-center"
-                  initial={{ y: 30, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ delay: index * 0.1 }}
-                >
-                  <h3 className="text-lg font-bold">{currency}</h3>
-                  <p>{amount.toFixed(2)}</p>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <h2 className="text-xl font-semibold mb-2">Recent Transactions</h2>
-            {transactions.length === 0 ? (
-              <p>No transactions yet.</p>
-            ) : (
-              <motion.table
-                className="w-full border mt-2"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.5 }}
-              >
-                <thead>
-                  <tr className="bg-gray-200">
-                    <th className="p-2 text-left">To</th>
-                    <th className="p-2 text-left">Amount</th>
-                    <th className="p-2 text-left">Currency</th>
-                    <th className="p-2 text-left">Status</th>
-                    <th className="p-2 text-left">Date</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {transactions.slice(0, 5).map((txn, index) => (
-                    <motion.tr
-                      key={txn._id}
-                      className="border-t"
-                      initial={{ x: -30, opacity: 0 }}
-                      animate={{ x: 0, opacity: 1 }}
-                      transition={{ delay: index * 0.1 }}
-                    >
-                      <td className="p-2">{txn.to}</td>
-                      <td className="p-2">{txn.amount}</td>
-                      <td className="p-2">{txn.currency}</td>
-                      <td
-                        className={`p-2 capitalize ${
-                          txn.status === "success"
-                            ? "text-green-600"
-                            : txn.status === "failed"
-                            ? "text-red-600"
-                            : "text-yellow-600"
-                        }`}
-                      >
-                        {txn.status}
-                      </td>
-                      <td className="p-2">
-                        {new Date(txn.date).toLocaleString()}
-                      </td>
-                    </motion.tr>
-                  ))}
-                </tbody>
-              </motion.table>
-            )}
-          </div>
+        <motion.div
+          className="bg-gradient-to-r from-blue-400 via-blue-50 to-blue-300 backdrop-blur-md rounded-2xl p-6 shadow-lg hover:scale-105 transition-transform"
+          whileHover={{ scale: 1.05 }}
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          <DownloadCloud className="w-12 h-12 mb-4 text-blue-900" />
+          <h2 className="text-xl font-semibold mb-2">Receive Crypto</h2>
+          <p>Get your wallet address and receive transactions securely.</p>
+          <Button variant="secondary" className="mt-4 w-full">Receive</Button>
         </motion.div>
       </motion.div>
+    </div>
     </>
   );
-}
+};
+
+export default Dashboard;

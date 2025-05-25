@@ -4,8 +4,9 @@ const transactionModel = new mongoose.Schema({
     amount: Number,
     currency: {
         type: String,
-        enum: ["BTS" , "ETC" , "USDT"],
+        enum: ["BTC" , "ETC" , "USDT"],
         required: true,
+        set: (v: string) => v.toUpperCase() ,
     },
     status : {
         type: String,
