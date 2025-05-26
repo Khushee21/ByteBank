@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { Wallet, Send, DownloadCloud } from 'lucide-react';
+import { Wallet, Send, DownloadCloud , History} from 'lucide-react';
 import '@/app/globals.css';
 import {useRouter}  from 'next/navigation';
 import Header from '@/components/Header';
@@ -22,7 +22,7 @@ const Dashboard = () => {
       </motion.h1>
 
       <motion.div
-        className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto"
+        className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto"
         initial="hidden"
         animate="visible"
         variants={{
@@ -67,7 +67,18 @@ const Dashboard = () => {
           <DownloadCloud className="w-12 h-12 mb-4 text-blue-900" />
           <h2 className="text-xl font-semibold mb-2">Receive Crypto</h2>
           <p>Get your wallet address and receive transactions securely.</p>
-          <Button variant="secondary" className="mt-4 w-full">Receive</Button>
+          <Button variant="secondary" className="mt-4 w-full" onClick={()=> router.push('/send-receive')}>Receive</Button>
+        </motion.div>
+        <motion.div
+          className="bg-gradient-to-r from-blue-50 via-blue-400 to-blue-100 backdrop-blur-md rounded-2xl p-6 shadow-lg hover:scale-105 transition-transform"
+           whileHover={{ scale: 1.05}}
+           initial={{ opacity: 0, y: 50}}
+           animate={{ opacity: 1, y:0}}
+        >
+          <History className="w-12 h-12 mb-4 text-blue-900" />
+           <h2 className="text-xl font-semibold mb-2">Transaction History</h2>
+           <p>See all the Trasactions with QR code .</p>
+           <Button variant="secondary" className="mt-4 w-full" onClick={()=> router.push('/TransactionHistory')}>View History</Button>
         </motion.div>
       </motion.div>
     </div>

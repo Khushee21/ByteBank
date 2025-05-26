@@ -23,6 +23,15 @@ export default function ProfileCompletionDialog({
   const [balance, setBalance] = useState("");
   const [currencies, setCurrencies] = useState("");
 
+  // Static list of currency codes and their names
+  const currencyOptions: [string, string][] = [
+    ["BTC", "Bitcoin"],
+    ["ETH", "Ethereum"],
+    ["USDT", "Tether"],
+    ["USD", "US Dollar"],
+    ["EUR", "Euro"],
+  ];
+
   const handleSubmit = () => {
     if (!walletAddress || !balance || !currencies) {
       alert("Please fill all fields.");
@@ -50,7 +59,9 @@ export default function ProfileCompletionDialog({
           className="space-y-4"
         >
           <div className="flex flex-col gap-1">
-            <label htmlFor="wallet" className="text-sm font-medium">Wallet Address</label>
+            <label htmlFor="wallet" className="text-sm font-medium">
+              Wallet Address
+            </label>
             <input
               id="wallet"
               type="text"
@@ -63,7 +74,9 @@ export default function ProfileCompletionDialog({
           </div>
 
           <div className="flex flex-col gap-1">
-            <label htmlFor="balance" className="text-sm font-medium">Balance</label>
+            <label htmlFor="balance" className="text-sm font-medium">
+              Balance
+            </label>
             <input
               id="balance"
               type="number"
@@ -76,16 +89,23 @@ export default function ProfileCompletionDialog({
           </div>
 
           <div className="flex flex-col gap-1">
-            <label htmlFor="currencies" className="text-sm font-medium">Currencies</label>
-            <input
+            <label htmlFor="currencies" className="text-sm font-medium">
+              Currency
+            </label>
+            <select
               id="currencies"
-              type="text"
-              placeholder="USD, ETH, BTC"
               value={currencies}
               onChange={(e) => setCurrencies(e.target.value)}
               className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
-            />
+            >
+              <option value="">Select a currency</option>
+              {currencyOptions.map(([code, name]) => (
+                <option key={code} value={code}>
+                  {code} - {name}
+                </option>
+              ))}
+            </select>
           </div>
 
           <button

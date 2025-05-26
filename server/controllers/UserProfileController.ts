@@ -1,15 +1,15 @@
 import { Request, Response, NextFunction } from 'express';
 import Transaction from "../models/Transation";;
-import User from '../models/User'; // optional if you use user info
+import User from '../models/User'; 
 
 
 export const getUserProfile = async (
-  req: Request,  // or CustomRequest if you're using custom typing for req.user
+  req: Request,  
   res: Response,
   next: NextFunction
 ): Promise<void> => {
   try {
-    const authUser = (req as any).user; // ✅ safer if you're not using a custom type
+    const authUser = (req as any).user; 
 
     if (!authUser) {
       res.status(401).json({ message: 'Unauthorized' });
@@ -33,7 +33,7 @@ export const getUserProfile = async (
       transactions,
     });
   } catch (err) {
-    console.error(err);
+    //console.error(err);
     res.status(500).json({ message: 'Failed to fetch profile' });
   }
 };

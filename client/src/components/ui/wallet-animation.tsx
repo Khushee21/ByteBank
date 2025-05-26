@@ -5,12 +5,12 @@ import { Icons } from './icons';
 
 export const WalletAnimation = () => {
   return (
-    <div className="relative bg-gradient-to-r from-blue-50 via-blue-300 to-blue-50">
+    <div className="relative to-blue-50">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
-        className="relative bg-gradient-to-br from-background to-muted border rounded-3xl p-6 shadow-2xl overflow-hidden"
+        className="relative bg-gradient-to-r from-blue-100 via-blue-300 to-blue-50  border rounded-3xl p-6 shadow-2xl overflow-hidden"
       >
         <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] bg-[length:40px_40px] opacity-10" />
         
@@ -23,7 +23,7 @@ export const WalletAnimation = () => {
             <div className="text-sm text-muted-foreground">Connected</div>
           </div>
           
-          <div className="bg-gradient-to-r from-blue-200 via-blue-50 to-blue-200 p-4 rounded-xl mb-6 ">
+          <div className="bg-gradient-to-r from-blue-200 via-blue-50 to-blue-400 p-4 rounded-xl mb-6 ">
             <div className="text-sm text-muted-foreground mb-1">Total Balance</div>
             <div className="text-3xl font-bold">$4,892.42</div>
             <div className="text-sm text-green-500 mt-1 flex items-center">

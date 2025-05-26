@@ -3,14 +3,14 @@ import { TransactionBody, users } from '../types/User';
 import { AuthRequest } from '../middlewares/authMiddlewar';
 import User from '../models/User';
 import Transation from '../models/Transation';
+import QRCode from 'qrcode';
 
 export const postTransaction = async (req: AuthRequest, res: Response, next: NextFunction) : Promise<void> => {
   try {
     const { type, currency, amount, recipient }: TransactionBody = req.body;
 
     const currentUserWallet = req.user?.wallet;
-    console.log("current user wallet", currentUserWallet);
-    // Check if user wallet exists and user is registered (in users object?)
+   // console.log("current user wallet", currentUserWallet);
     if (!currentUserWallet ) {
       res.status(401).json({ error: 'Unauthorized or user not found' });
       return;
@@ -27,8 +27,8 @@ export const postTransaction = async (req: AuthRequest, res: Response, next: Nex
       return;
     }
     const user = await User.findById(req.user.id).select("-password");
-    console.log("res.user", req.user);
-    console.log("user", user);
+   // console.log("res.user", req.user);
+    //console.log("user", user);
     if (!user) {
       res.status(404).json({ error: 'User not found.' });
       return;
@@ -51,10 +51,7 @@ export const postTransaction = async (req: AuthRequest, res: Response, next: Nex
          res.status(400).json({ error: 'Insufficient balance.' });
          return;
       }
-
-      // Deduct from sender
       (user.currencies as any)[currency] -= amount;
-      // Add to receiver
       (receiver.currencies as any)[currency] += amount;
 
       await user.save();
@@ -76,6 +73,8 @@ export const postTransaction = async (req: AuthRequest, res: Response, next: Nex
     if (type === 'receive') {
       (user.currencies as any)[currency] += amount;
 
+      const qrData = `${currency.toLowerCase()}:${user.walletAddress}`;
+      const qrImage = await QRCode.toDataURL(qrData); 
       await Transation.create({
         user: user._id,
         type: 'receive',
@@ -93,7 +92,25 @@ export const postTransaction = async (req: AuthRequest, res: Response, next: Nex
      res.status(400).json({ error: 'Invalid transaction type.' });
      return;
   } catch (error) {
-    console.error('Transaction Error:', error);
+    //console.error('Transaction Error:', error);
     next(error);
+  }
+};
+
+
+export const getTransactionHistory = async (req : AuthRequest, res:Response ) : Promise<void> => {
+  try{
+    const userId = req.user?.id;
+    //console.log("userId", userId);
+    if(!userId) {
+      res.status(401).json({ error : 'Unauthorized: user not found' });
+      return;
+    }
+    const transactions = await Transation.find({ user: userId}).sort({ date: -1});
+    res.json(transactions);
+  }
+  catch(error){
+   // console.error('Error fetching transaction history:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 };

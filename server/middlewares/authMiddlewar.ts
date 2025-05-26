@@ -35,7 +35,7 @@ export const authMiddleware = async (
 
     req.user = {
       id: user._id.toString(),
-      wallet: user.walletAddress, // ✅ correct assignment
+      wallet: user.walletAddress, 
     };
 
     next();

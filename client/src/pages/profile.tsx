@@ -8,7 +8,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import "@/app/globals.css";
 import Header from "@/components/Header";
 
-
 export default function Dashboard() {
   const [user, setUser] = useState<User | null>(null);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -31,7 +30,7 @@ export default function Dashboard() {
         }
       );
       setUser(res.data.user ?? null);
-     console.log("Email from backend:", res.data.user?.email);
+      console.log("Email from backend:", res.data.user?.email);
       setTransactions(res.data.transactions ?? []);
     } catch (err: any) {
       console.error("Dashboard error:", err);
@@ -64,12 +63,12 @@ export default function Dashboard() {
       .split(",")
       .reduce((acc, curr) => {
         const key = curr.trim();
-        acc[key] =parseFloat(data.balance);
+        acc[key] = parseFloat(data.balance);
         return acc;
       }, {} as Record<string, number>);
 
-    setUser((prev) =>{
-      if(!prev) return null;
+    setUser((prev) => {
+      if (!prev) return null;
       return {
         ...prev,
         walletAddress: data.walletAddress,
@@ -81,12 +80,11 @@ export default function Dashboard() {
     toast.success("Profile updated successfully!");
   };
 
-  if (!user)
-    return <p className="text-center mt-20">Loading dashboard...</p>;
+  if (!user) return <p className="text-center mt-20">Loading dashboard...</p>;
 
   return (
     <>
-    <Header/>
+      <Header />
       <AnimatePresence>
         {isDialogOpen && (
           <motion.div
@@ -108,16 +106,16 @@ export default function Dashboard() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
-        className="min-h-screen bg-blue-50 p-6"
+        className="min-h-screen bg-blue-50 p-4 sm:p-6"
       >
         <motion.div
           initial={{ y: 40, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ type: "spring", stiffness: 60 }}
-          className="max-w-4xl mx-auto bg-white shadow-md p-6 rounded-md"
+          className="max-w-4xl mx-auto bg-white shadow-md p-4 sm:p-6 rounded-md"
         >
           <motion.h1
-            className="text-2xl font-bold mb-4 pt-14"
+            className="text-xl sm:text-2xl font-bold mb-4 pt-14"
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ delay: 0.3 }}
@@ -125,14 +123,18 @@ export default function Dashboard() {
             Welcome to Your Wallet
           </motion.h1>
 
-          <div className="mb-6">
-            <p><strong>Email:</strong> {user.email}</p>
-            <p><strong>Wallet Address:</strong> {user.walletAddress}</p>
+          <div className="mb-6 space-y-1 text-sm sm:text-base">
+            <p>
+              <strong>Email:</strong> {user.email}
+            </p>
+            <p>
+              <strong>Wallet Address:</strong> {user.walletAddress}
+            </p>
           </div>
 
           <div className="mb-6">
-            <h2 className="text-xl font-semibold mb-2">Balances</h2>
-            <div className="grid grid-cols-3 gap-4">
+            <h2 className="text-lg sm:text-xl font-semibold mb-2">Balances</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
               {Object.entries(user.currencies ?? {}).map(([currency, amount], index) => (
                 <motion.div
                   key={currency}
@@ -141,63 +143,66 @@ export default function Dashboard() {
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: index * 0.1 }}
                 >
-                  <h3 className="text-lg font-bold">{currency}</h3>
-                  <p>{amount.toFixed(2)}</p>
+                  <h3 className="text-base sm:text-lg font-bold">{currency}</h3>
+                  <p className="text-sm sm:text-base">{amount.toFixed(2)}</p>
                 </motion.div>
               ))}
             </div>
           </div>
 
           <div>
-            <h2 className="text-xl font-semibold mb-2">Recent Transactions</h2>
+            <h2 className="text-lg sm:text-xl font-semibold mb-2">Recent Transactions</h2>
             {transactions.length === 0 ? (
               <p>No transactions yet.</p>
             ) : (
-              <motion.table
-                className="w-full border mt-2"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.5 }}
-              >
-                <thead>
-                  <tr className="bg-gray-200">
-                    <th className="p-2 text-left">To</th>
-                    <th className="p-2 text-left">Amount</th>
-                    <th className="p-2 text-left">Currency</th>
-                    <th className="p-2 text-left">Status</th>
-                    <th className="p-2 text-left">Date</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {transactions.slice(0, 5).map((txn, index) => (
-                    <motion.tr
-                      key={txn._id}
-                      className="border-t"
-                      initial={{ x: -30, opacity: 0 }}
-                      animate={{ x: 0, opacity: 1 }}
-                      transition={{ delay: index * 0.1 }}
-                    >
-                      <td className="p-2">{txn.to}</td>
-                      <td className="p-2">{txn.amount}</td>
-                      <td className="p-2">{txn.currency}</td>
-                      <td
-                        className={`p-2 capitalize ${
-                          txn.status === "success"
-                            ? "text-green-600"
-                            : txn.status === "failed"
-                            ? "text-red-600"
-                            : "text-yellow-600"
-                        }`}
+              // Make table horizontally scrollable on small screens
+              <div className="overflow-x-auto">
+                <motion.table
+                  className="w-full border mt-2 min-w-[600px]"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  <thead>
+                    <tr className="bg-gray-200">
+                      <th className="p-2 text-left whitespace-nowrap">To</th>
+                      <th className="p-2 text-left whitespace-nowrap">Amount</th>
+                      <th className="p-2 text-left whitespace-nowrap">Currency</th>
+                      <th className="p-2 text-left whitespace-nowrap">Status</th>
+                      <th className="p-2 text-left whitespace-nowrap">Date</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {transactions.slice(0, 5).map((txn, index) => (
+                      <motion.tr
+                        key={txn._id}
+                        className="border-t"
+                        initial={{ x: -30, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        transition={{ delay: index * 0.1 }}
                       >
-                        {txn.status}
-                      </td>
-                      <td className="p-2">
-                        {new Date(txn.date).toLocaleString()}
-                      </td>
-                    </motion.tr>
-                  ))}
-                </tbody>
-              </motion.table>
+                        <td className="p-2 whitespace-nowrap">{txn.to}</td>
+                        <td className="p-2 whitespace-nowrap">{txn.amount}</td>
+                        <td className="p-2 whitespace-nowrap">{txn.currency}</td>
+                        <td
+                          className={`p-2 capitalize whitespace-nowrap ${
+                            txn.status === "success"
+                              ? "text-green-600"
+                              : txn.status === "failed"
+                              ? "text-red-600"
+                              : "text-yellow-600"
+                          }`}
+                        >
+                          {txn.status}
+                        </td>
+                        <td className="p-2 whitespace-nowrap">
+                          {new Date(txn.date).toLocaleString()}
+                        </td>
+                      </motion.tr>
+                    ))}
+                  </tbody>
+                </motion.table>
+              </div>
             )}
           </div>
         </motion.div>

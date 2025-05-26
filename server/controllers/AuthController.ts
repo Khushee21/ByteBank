@@ -3,12 +3,11 @@ import User from "../models/User";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-// Generate a pseudo wallet address
+
 const generateWalletAddress = (): string => {
   return "0x" + Math.random().toString(16).slice(2);
 };
 
-// REGISTER CONTROLLER
 export const register: RequestHandler = async (req, res): Promise<void> => {
   try {
     const { email, password } = req.body;
@@ -36,7 +35,7 @@ export const register: RequestHandler = async (req, res): Promise<void> => {
 
     res.status(201).json({ message: "User created successfully" });
   } catch (error) {
-    console.error("Error in register controller:", error);
+   // console.error("Error in register controller:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };

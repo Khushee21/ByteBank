@@ -40,7 +40,7 @@ export default function Home() {
         <div className="absolute inset-0 bg-gradient-to-b from-background/10 via-background/50 to-background/80" />
         <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-10 items-center max-w-7xl mx-auto w-full">
         <div className="text-left  px-4">
-          <h1 className="text-5xl font-bold tracking-tight sm:text-6xl md:text-7xl bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-600">
+          <h1 className="text-2xl font-bold tracking-tight sm:text-6xl md:text-4xl bg-clip-text text-transparent bg-gradient-to-r from-primary to-blue-600">
             Your Gateway to the Web3 World
           </h1>
           
