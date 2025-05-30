@@ -21,18 +21,22 @@ export default function Home() {
         <div className="absolute  z-0 ">
           <ParticlesBackground />
         </div>
-  <div className='flex flex-row items-center justify-center mt-20 space-x-6'>
+            <div className='flex flex-col sm:flex-row items-center justify-center mt-20 sm:space-x-6 space-y-8 sm:space-y-0'>
   <div>
-  <img
-    src="/img2.jpg"
-    alt=""
-    className="relative w-1/8 mx-20 z-10  mt-20  rounded-lg shadow-lg object-cover"
-  />
+    <img
+      src="/img2.jpg"
+      alt=""
+      className="relative w-40 sm:w-1/4 md:w-1/3 lg:w-[65%] xl:w-[800px] mx-auto sm:mx-20 z-10 mt-10 rounded-lg shadow-lg object-cover"
+
+    />
   </div>
   <div>
-    <h1 className='text-9xl font-bold text-blue-800'>BYTE BANK</h1>
+    <h1 className='text-5xl sm:text-9xl font-bold text-blue-800 text-center sm:text-left'>
+      BYTE BANK
+    </h1>
   </div>
-   </div>
+</div>
+
 </div>
 
       {/* Hero Section */}
