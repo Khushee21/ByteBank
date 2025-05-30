@@ -23,10 +23,12 @@ app.use('/api/user' , UserProfileRouter);
 app.use('/api/transactions' , TransactionRouter);
 
 // Connect to MongoDB
+const port = process.env.PORT || 5002;
+
 mongoose.connect(process.env.MONGO_URL as string)
   .then(() => {
-    app.listen(process.env.PORT || 5002, () => {
-      console.log(`✅ Server is running on port ${process.env.PORT || 3002}`);
+    app.listen(port, () => {
+      console.log(`✅ Server is running on port ${port}`);
     });
     console.log('✅ Connected to MongoDB');
   })

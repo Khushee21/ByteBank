@@ -24,7 +24,7 @@ app.use('/api/transactions', TransactionRouter_1.default);
 mongoose_1.default.connect(process.env.MONGO_URL)
     .then(() => {
     app.listen(process.env.PORT || 5002, () => {
-        console.log(`✅ Server is running on port ${process.env.PORT || 3002}`);
+        console.log(`✅ Server is running on port ${process.env.PORT || 5002}`);
     });
     console.log('✅ Connected to MongoDB');
 })
