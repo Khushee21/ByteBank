@@ -5,5 +5,11 @@
   },
   "devDependencies": {
     "@types/axios": "^0.9.36"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "nodemon --watch 'src/**/*.ts' --exec ts-node src/index.ts"
   }
 }
