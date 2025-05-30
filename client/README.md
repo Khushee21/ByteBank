@@ -2,6 +2,7 @@ BYTEBANK 💰
 
 BYTEBANK is your personal wallet application that allows users to:
 
+-Sign In + Sign up
 -Exchange currency
 -Track transaction history
 -Generate a unique QR code for each user
