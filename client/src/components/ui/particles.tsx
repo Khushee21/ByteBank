@@ -1,7 +1,6 @@
 'use client';
 
 import { useCallback } from 'react';
-import { useRouter } from 'next/navigation';
 import { Engine } from 'tsparticles-engine';
 import { loadSlim } from 'tsparticles-slim';
 import Particles from 'react-tsparticles';

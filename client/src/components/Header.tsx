@@ -1,13 +1,11 @@
 'use client';
-
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 const Header = () => {
   const router = useRouter();
 
-const handleLogout = async(e: React.MouseEvent)=>{
+const handleLogout = async()=>{
   localStorage.removeItem("token");
   router.push("/");
 }

@@ -29,7 +29,7 @@ export default function AuthPages() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const router = useRouter();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!isLogin && password !== confirmPassword) {
       toast.error('Passwords do not match');

@@ -5,13 +5,12 @@ import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Icons } from '@/components/ui/icons';
 import { ParticlesBackground } from '@/components/ui/particles';
-import Particles from 'react-tsparticles';
 import { WalletAnimation } from '@/components/ui/wallet-animation';
 import { CurrencyTicker } from '@/components/ui/currency-ticker';
 import { Testimonials } from '@/components/ui/testimonials';
 import { FeaturesGrid } from '@/components/ui/features-grid';
-import {motion} from 'framer-motion';
 import Auth from '@/components/Auth';
+import Image from "next/image";
 
 export default function Home() {
   return (
@@ -23,12 +22,14 @@ export default function Home() {
         </div>
             <div className='flex flex-col sm:flex-row items-center justify-center mt-20 sm:space-x-6 space-y-8 sm:space-y-0'>
   <div>
-    <img
-      src="/img2.jpg"
-      alt=""
-      className="relative w-40 sm:w-1/4 md:w-1/3 lg:w-[65%] xl:w-[800px] mx-auto sm:mx-20 z-10 mt-10 rounded-lg shadow-lg object-cover"
+    <Image
+  src="/img2.jpg"
+  alt="Byte Bank"
+  width={800}
+  height={600}
+  className="relative w-40 sm:w-1/4 md:w-1/3 lg:w-[65%] xl:w-[800px] mx-auto sm:mx-20 z-10 mt-10 rounded-lg shadow-lg object-cover"
+/>
 
-    />
   </div>
   <div>
     <h1 className='text-5xl sm:text-9xl font-bold text-blue-800 text-center sm:text-left'>
